@@ -46,7 +46,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake>
 
         magnitudeView.setText(Double.toString(currentQuake.getMagnitude()));
         placeView.setText(currentQuake.getPlace());
-        timeView.setText(Long.toString(currentQuake.getTime()));
+        timeView.setText(currentQuake.getFormattedDate());
 
 
         return listItem;
