@@ -20,6 +20,11 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake>
     private Context mContext;
     private List<Earthquake> earthquakeList;
 
+    /**
+     * Contructor for the EarthquakeAdapter
+     * @param context
+     * @param list - List of Earthquakes
+     */
     public EarthquakeAdapter(@NonNull Activity context, ArrayList<Earthquake> list)
     {
         super(context, 0, list);
@@ -31,19 +36,24 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake>
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent)
     {
+        // Gets the current view
         View listItem = convertView;
 
+        // Inflates the list item if null
         if(listItem == null)
         {
             listItem = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false);
         }
 
+        // Gets the current earthquake for the list
         final Earthquake currentQuake = earthquakeList.get(position);
 
+        // Getting all the views
         TextView magnitudeView = (TextView) listItem.findViewById(R.id.magnitude_view);
         TextView placeView = (TextView) listItem.findViewById(R.id.place_view);
         TextView timeView = (TextView) listItem.findViewById(R.id.time_view);
 
+        // Assinging appropriate values to the views
         magnitudeView.setText(Double.toString(currentQuake.getMagnitude()));
         placeView.setText(currentQuake.getPlace());
         timeView.setText(currentQuake.getFormattedDate());

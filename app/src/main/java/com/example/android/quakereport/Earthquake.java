@@ -52,11 +52,16 @@ public class Earthquake
         return mTime;
     }
 
+    /**
+     * Formats the mTime variable from milliseconds to an actual date formatted:
+     * "Oct 2, 1990"
+     * @return formattedDate
+     */
     public String getFormattedDate()
     {
         String formattedDate;
 
-        Date date = new Date(this.getTime()*1000);
+        Date date = new Date(this.getTime());
         DateFormat format = new SimpleDateFormat("MMM d, yyyy");
         format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
         formattedDate = format.format(date);
