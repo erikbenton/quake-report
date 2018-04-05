@@ -1,5 +1,7 @@
 package com.example.android.quakereport;
 
+import android.support.v4.content.ContextCompat;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
@@ -11,18 +13,21 @@ public class Earthquake
     private double mMagnitude;
     private String mPlace;
     private long mTime;
+    private String mURL;
 
     /**
      * Constructor fo Earthquake
      * @param mag - Magnitude of the earthquake
      * @param place - Where the Earthquake happened
      * @param time - Time in epoch time (seconds) when earthquake occurred
+     * @param url - URL for the earthquake
      */
-    public Earthquake(double mag, String place, long time)
+    public Earthquake(double mag, String place, long time, String url)
     {
         mMagnitude = mag;
         mPlace = place;
         mTime = time;
+        mURL = url;
     }
 
     /**
@@ -50,6 +55,11 @@ public class Earthquake
     public long getTime()
     {
         return mTime;
+    }
+
+    public String getURL()
+    {
+        return mURL;
     }
 
     /**
@@ -86,4 +96,6 @@ public class Earthquake
 
         return formattedTime;
     }
+
+
 }
