@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,24 +40,52 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake>
         // Gets the current view
         View listItem = convertView;
 
+        // Gets the current earthquake for the list
+        final Earthquake currentQuake = earthquakeList.get(position);
+
+        // Setting up magnitude string for display
+        DecimalFormat formatter = new DecimalFormat("0.0");
+        String magnitude = formatter.format(currentQuake.getMagnitude());
+
+        // Setting up location variables for display
+        String location = currentQuake.getPlace();
+        String vicinity;
+        String place;
+
+        //Find index of "of"
+        int ofIndex = location.indexOf("of");
+
+        // If there is an "of"
+        if(ofIndex > 0)
+        {
+            vicinity = location.substring(0, ofIndex + 2);
+            place = location.substring(ofIndex + 3);
+        }
+        else // If there isn't an "of"
+        {
+            vicinity = "Near the";
+            place = location;
+        }
+
         // Inflates the list item if null
         if(listItem == null)
         {
             listItem = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false);
         }
 
-        // Gets the current earthquake for the list
-        final Earthquake currentQuake = earthquakeList.get(position);
-
         // Getting all the views
         TextView magnitudeView = (TextView) listItem.findViewById(R.id.magnitude_view);
+        TextView vicinityView = (TextView) listItem.findViewById(R.id.vicinity_view);
         TextView placeView = (TextView) listItem.findViewById(R.id.place_view);
+        TextView dateView = (TextView) listItem.findViewById(R.id.date_view);
         TextView timeView = (TextView) listItem.findViewById(R.id.time_view);
 
-        // Assinging appropriate values to the views
-        magnitudeView.setText(Double.toString(currentQuake.getMagnitude()));
-        placeView.setText(currentQuake.getPlace());
-        timeView.setText(currentQuake.getFormattedDate());
+        // Assigning appropriate values to the views
+        magnitudeView.setText(magnitude);
+        vicinityView.setText(vicinity);
+        placeView.setText(place);
+        dateView.setText(currentQuake.getFormattedDate());
+        timeView.setText(currentQuake.getFormattedTime());
 
 
         return listItem;

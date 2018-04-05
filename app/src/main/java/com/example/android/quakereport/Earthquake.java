@@ -59,16 +59,31 @@ public class Earthquake
      */
     public String getFormattedDate()
     {
+        // Create String for date
         String formattedDate;
 
+        // Get the time in ms and create date with it
         Date date = new Date(this.getTime());
-        DateFormat format = new SimpleDateFormat("MMM d, yyyy");
-        format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
-        formattedDate = format.format(date);
-        System.out.println(formattedDate);
-        format.setTimeZone(TimeZone.getTimeZone("Australia/Sydney"));
+
+        // Format the date to be: "Oct 2, 1990"
+        DateFormat format = new SimpleDateFormat("LLL DD, yyyy");
         formattedDate = format.format(date);
 
         return formattedDate;
+    }
+
+    public String getFormattedTime()
+    {
+        // Create String for date
+        String formattedTime;
+
+        // Get the time in ms and create date with it
+        Date date = new Date(this.getTime());
+
+        // Format the date to be: "Oct 2, 1990"
+        DateFormat format = new SimpleDateFormat("h:mm a");
+        formattedTime = format.format(date);
+
+        return formattedTime;
     }
 }
