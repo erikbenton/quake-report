@@ -18,6 +18,7 @@ package com.example.android.quakereport;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -26,31 +27,37 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EarthquakeActivity extends AppCompatActivity {
 
-    public static final String LOG_TAG = EarthquakeActivity.class.getName();
+    /** URL for earthquake data from the USGS dataset */
+    private static final String USGS_REQUEST_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=5&limit=10";
+    private EarthquakeAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-        // Create a fake list of earthquake locations.
-        final ArrayList<Earthquake> earthquakes = QueryUtils.extractEarthquakes();
-
-        // Create a new {@link ArrayAdapter} of earthquakes
-        EarthquakeAdapter adapter = new EarthquakeAdapter(this, earthquakes);
-
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
 
+        // Create a new {@link ArrayAdapter} of earthquakes
+        mAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
+
+        // Set the adapter on the {@link ListView}
+        // so the list can be populated in the user interface
+        earthquakeListView.setAdapter(mAdapter);
+
+        // When the user clicks on an entry in the list
+        // They open their web browser and go to url for that quake
         earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
             {
-                Earthquake earthquake = earthquakes.get(i);
+                Earthquake earthquake = mAdapter.getItem(i);
 
                 String url = earthquake.getURL();
                 Intent openWebpage = new Intent(Intent.ACTION_VIEW);
@@ -59,9 +66,43 @@ public class EarthquakeActivity extends AppCompatActivity {
 
             }
         });
+        EarthquakeAsyncTask task = new EarthquakeAsyncTask();
+        task.execute(USGS_REQUEST_URL);
+    }
 
-        // Set the adapter on the {@link ListView}
-        // so the list can be populated in the user interface
-        earthquakeListView.setAdapter(adapter);
+    private class EarthquakeAsyncTask extends AsyncTask<String, Void, List<Earthquake>>
+    {
+        /**
+         *
+         * @param strings
+         * @return
+         */
+        @Override
+        protected List<Earthquake> doInBackground(String... strings)
+        {
+            if(strings.length < 1 || strings[0] == null)
+            {
+                return null;
+            }
+
+            List<Earthquake> earthquakes = QueryUtils.fetchEarthquakeData(strings[0]);
+
+            return earthquakes;
+        }
+
+        /**
+         *
+         * @param earthquakes
+         */
+        @Override
+        protected void onPostExecute(List<Earthquake> earthquakes)
+        {
+            mAdapter.clear();
+
+            if(earthquakes != null && !earthquakes.isEmpty())
+            {
+                mAdapter.addAll(earthquakes);
+            }
+        }
     }
 }

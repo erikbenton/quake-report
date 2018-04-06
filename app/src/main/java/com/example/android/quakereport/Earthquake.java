@@ -76,7 +76,7 @@ public class Earthquake
         Date date = new Date(this.getTime());
 
         // Format the date to be: "Oct 2, 1990"
-        DateFormat format = new SimpleDateFormat("LLL DD, yyyy");
+        DateFormat format = new SimpleDateFormat("LLL dd, yyyy");
         formattedDate = format.format(date);
 
         return formattedDate;
