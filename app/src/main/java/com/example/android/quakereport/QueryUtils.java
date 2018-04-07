@@ -100,6 +100,7 @@ public final class QueryUtils {
 
     public static List<Earthquake> fetchEarthquakeData(String requestURL)
     {
+        Log.v("fetchEarthquakeData", "Here");
         // Create url object
         URL url = createUrl(requestURL);
 
